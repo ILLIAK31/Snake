@@ -1,18 +1,19 @@
-#include <SFML/Graphics.hpp>
-#include "Snake.hpp"
-#include <random>
+#include <algorithm>
 #include <iostream>
 #include <vector>
+#include "Snake.hpp"
 
-Snake::Snake() : window(sf::VideoMode(410, 410), "Snake") , X(0) , Y(0) , Score(0)
-{	
-	if (!Background_Texture.loadFromFile("1.jpg")){}
+Snake::Snake() :
+	window(sf::VideoMode(410, 410), "Snake"), X(0), Y(0),
+	Score(0), random(std::random_device{}())
+{
+	if (!Background_Texture.loadFromFile("1.jpg")) {}
 	Background_Sprite.setTexture(Background_Texture);
 	if (!Fruit_Texture.loadFromFile("2.png")) {}
 	Fruit_Sprite.setTexture(Fruit_Texture);
 	float Fruit_Scale = 0.085f;
 	Fruit_Sprite.setScale(Fruit_Scale, Fruit_Scale);
-	window.setFramerateLimit(9); 
+	window.setFramerateLimit(9);
 	sf::Vector2i head(10, 10);
 	snake.push_back(head);
 	Spawn_Food();
@@ -30,10 +31,20 @@ void Snake::Run()
 
 void Snake::Spawn_Food()
 {
-	std::mt19937 mt_engine(std::random_device{}());
-	std::uniform_int_distribution<int> dist(0, 19);
-	food.x = dist(mt_engine);
-	food.y = dist(mt_engine);
+	// Find all possible points on the grid
+	std::vector<sf::Vector2i> possible_positions;
+	for (int x = 0; x < 20; ++x)
+	{
+		for (int y = 0; y < 20; ++y)
+		{
+			sf::Vector2i point(x, y);
+			if (std::find(snake.begin(), snake.end(), point) == snake.end())
+				possible_positions.push_back(point);
+		}
+	}
+	// Choose one point randomly
+	std::uniform_int_distribution<int> dist(0, possible_positions.size());
+	food = possible_positions[dist(random)];
 	Fruit_Sprite.setPosition(food.x * 20, food.y * 20);
 }
 
@@ -82,7 +93,7 @@ void Snake::Update()
 	else
 		snake.pop_back();
 	sf::Vector2i newHead(newX, newY);
-	snake.insert(snake.begin(), newHead);
+	snake.push_front(newHead);
 }
 
 void Snake::Render()
@@ -103,14 +114,9 @@ void Snake::Render()
 
 bool Snake::Check_Collision()
 {
-	for (size_t i = 1; i < snake.size(); i++)
-	{
-		if (snake[i].x == snake[0].x && snake[i].y == snake[0].y)
-			return true;
-	}
-	return false;
+	return std::find(snake.begin() + 1, snake.end(), snake[0]) != snake.end();
 }
 
-Snake::~Snake(){}
+Snake::~Snake() {}
 
 
