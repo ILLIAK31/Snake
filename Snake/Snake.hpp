@@ -1,4 +1,6 @@
 #pragma once
+#include <SFML/Graphics.hpp>
+#include <deque>
 
 class Snake
 {
@@ -13,7 +15,7 @@ private:
 	void Render();
 	sf::RenderWindow window;
 	int X, Y, Score;
-	std::vector<sf::Vector2i> snake;
+	std::deque<sf::Vector2i> snake;
 	sf::Vector2i food;
 	bool Check_Collision();
 	sf::Texture Background_Texture , Fruit_Texture;
