@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <random>
 #include <deque>
 
 class Snake
@@ -16,6 +17,7 @@ private:
 	sf::RenderWindow window;
 	int X, Y, Score;
 	std::deque<sf::Vector2i> snake;
+	std::mt19937 random;
 	sf::Vector2i food;
 	bool Check_Collision();
 	sf::Texture Background_Texture , Fruit_Texture;
