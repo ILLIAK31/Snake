@@ -43,7 +43,7 @@ void Snake::Spawn_Food()
 		}
 	}
 	// Choose one point randomly
-	std::uniform_int_distribution<int> dist(0, possible_positions.size());
+	std::uniform_int_distribution<int> dist(0, possible_positions.size() - 1);
 	food = possible_positions[dist(random)];
 	Fruit_Sprite.setPosition(food.x * 20, food.y * 20);
 }
@@ -85,6 +85,8 @@ void Snake::Update()
 		std::cout << "Game Over!\nScore: " << Score << std::endl;
 		window.close();
 	}
+	sf::Vector2i newHead(newX, newY);
+	snake.push_front(newHead);
 	if (newX == food.x && newY == food.y)
 	{
 		Score += 10;
@@ -92,8 +94,6 @@ void Snake::Update()
 	}
 	else
 		snake.pop_back();
-	sf::Vector2i newHead(newX, newY);
-	snake.push_front(newHead);
 }
 
 void Snake::Render()
