@@ -32,8 +32,11 @@ void Snake::Spawn_Food()
 {
 	std::mt19937 mt_engine(std::random_device{}());
 	std::uniform_int_distribution<int> dist(0, 19);
-	food.x = dist(mt_engine);
-	food.y = dist(mt_engine);
+	do
+	{
+		food.x = dist(mt_engine);
+		food.y = dist(mt_engine);
+	} while (Food_Position(food.x, food.y));
 	Fruit_Sprite.setPosition(food.x * 20, food.y * 20);
 }
 
@@ -108,6 +111,14 @@ bool Snake::Check_Collision()
 		if (snake[i].x == snake[0].x && snake[i].y == snake[0].y)
 			return true;
 	}
+	return false;
+}
+
+bool Snake::Food_Position(int x , int y)
+{
+	for (size_t i = 0; i < snake.size(); i++)
+		if (snake[i].x == x && snake[i].y == y)
+			return true;
 	return false;
 }
 

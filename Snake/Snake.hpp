@@ -15,7 +15,7 @@ private:
 	int X, Y, Score;
 	std::vector<sf::Vector2i> snake;
 	sf::Vector2i food;
-	bool Check_Collision();
+	bool Check_Collision() , Food_Position(int x , int y);
 	sf::Texture Background_Texture , Fruit_Texture;
 	sf::Sprite Background_Sprite , Fruit_Sprite;
 };
