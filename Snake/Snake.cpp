@@ -24,6 +24,7 @@ void Snake::Run()
 	{
 		Process();
 		Update();
+		Process();
 		Render();
 	}
 }
@@ -77,6 +78,8 @@ void Snake::Update()
 		std::cout << "Game Over!\nScore: " << Score << std::endl;
 		window.close();
 	}
+	sf::Vector2i newHead(newX, newY);
+	snake.insert(snake.begin(), newHead);
 	if (newX == food.x && newY == food.y)
 	{
 		Score += 10;
@@ -84,8 +87,6 @@ void Snake::Update()
 	}
 	else
 		snake.pop_back();
-	sf::Vector2i newHead(newX, newY);
-	snake.insert(snake.begin(), newHead);
 }
 
 void Snake::Render()
